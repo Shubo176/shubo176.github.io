@@ -25,35 +25,23 @@
   <main class="container">
     <section class="page-title">
       <h1>Projects</h1>
-      <p>Selected AI for Science work. Click a card to view details.</p>
+      <p>Selected AI for Science work. Click to view details.</p>
     </section>
 
-    <section class="grid">
-      <!-- Project 1 -->
+    <section class="stack">
+      <!-- Nanopore project card -->
       <a class="card card--link" href="project-nanopore.html">
         <div class="card__tag">AI4S · Genomics</div>
         <h3>DNA Modification Detection from Nanopore Signals with Transformers</h3>
-        <p class="muted">
-          Multimodal input: current traces + 21bp one-hot → 21×36 features → 6-layer Transformer encoder.
-        </p>
-        <ul class="mb">
-          <li>Data: xtg103/plasmid train-val; <em>sal87</em> test.</li>
-          <li>Finding: ~20% modified proportion on <em>sal87</em>.</li>
-        </ul>
+        <p class="muted">End-to-end pipeline from Nanopore current and 21bp windows to a Transformer classifier.</p>
         <span class="card__cta">View details →</span>
       </a>
 
-      <!-- Project 2 -->
+      <!-- Protein Tm project card -->
       <a class="card card--link" href="project-protein-tm.html">
         <div class="card__tag">AI4S · Proteins</div>
         <h3>Protein Melting Temperature Prediction via ESM and AlphaFold</h3>
-        <p class="muted">
-          Dual-channel fusion of sequence/structure (1280-d) + Rosetta ΔG, entropy, OGT → MLP regression.
-        </p>
-        <ul class="mb">
-          <li>Data: FireProt, ProThermDB, Meltome, ThermomutDB, literature; 90% CD-HIT, N=28,463.</li>
-          <li>Performance: test RMSE = 9.37.</li>
-        </ul>
+        <p class="muted">Dual-channel fusion of sequence/structure embeddings with biophysical descriptors.</p>
         <span class="card__cta">View details →</span>
       </a>
     </section>
