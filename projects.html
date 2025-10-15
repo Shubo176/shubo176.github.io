@@ -25,65 +25,37 @@
   <main class="container">
     <section class="page-title">
       <h1>Projects</h1>
-      <p>Selected AI for Science work. Code and write-ups can be shared on request.</p>
+      <p>Selected AI for Science work. Click a card to view details.</p>
     </section>
 
     <section class="grid">
       <!-- Project 1 -->
-      <article class="card">
+      <a class="card card--link" href="project-nanopore.html">
         <div class="card__tag">AI4S · Genomics</div>
         <h3>DNA Modification Detection from Nanopore Signals with Transformers</h3>
         <p class="muted">
-          Multimodal input: standardized current traces (fixed length 32) and one-hot 21bp window
-          fused into a 21×36 feature matrix. Modeled using a 6-layer Transformer encoder
-          (8 heads, FFN 512→256→512, GELU) with residual connections, layer norm, and dropout.
+          Multimodal input: current traces + 21bp one-hot → 21×36 features → 6-layer Transformer encoder.
         </p>
         <ul class="mb">
-          <li>Data: xtg103 (unmodified) and a fully modified plasmid for train/validation; <em>sal87</em> for test.</li>
-          <li>Training: F1-driven LR scheduler, early stopping, best/last checkpoints.</li>
-          <li>Finding: ~20% modified proportion predicted on <em>sal87</em> under current setting.</li>
+          <li>Data: xtg103/plasmid train-val; <em>sal87</em> test.</li>
+          <li>Finding: ~20% modified proportion on <em>sal87</em>.</li>
         </ul>
-        <details>
-          <summary>Pipeline details</summary>
-          <ul>
-            <li>Signal normalization to [-1, 1], window extraction, padding/truncation to length 32.</li>
-            <li>Sequence one-hot encoding for A/T/C/G and concatenation with signal features.</li>
-            <li>Average pooling over encoder outputs followed by an MLP classifier with logistic output.</li>
-          </ul>
-        </details>
-      </article>
+        <span class="card__cta">View details →</span>
+      </a>
 
       <!-- Project 2 -->
-      <article class="card">
+      <a class="card card--link" href="project-protein-tm.html">
         <div class="card__tag">AI4S · Proteins</div>
         <h3>Protein Melting Temperature Prediction via ESM and AlphaFold</h3>
         <p class="muted">
-          Dual-channel fusion of sequence and structure embeddings (1280-d each), combined with Rosetta ΔG,
-          Shannon entropy, and OGT classification outputs. Regressor is a multi-layer perceptron with dropout.
-          Hyper-parameters selected with Optuna.
+          Dual-channel fusion of sequence/structure (1280-d) + Rosetta ΔG, entropy, OGT → MLP regression.
         </p>
         <ul class="mb">
-          <li>Data: FireProt, ProThermDB, Meltome, ThermomutDB, and literature-mined samples; CD-HIT 90% de-redundancy (N=28,463).</li>
-          <li>Split: 9:1 train/val. 75 post-2023 samples as a held-out test set.</li>
-          <li>Performance: test RMSE = 9.37; running 10-fold CV for stability assessment.</li>
+          <li>Data: FireProt, ProThermDB, Meltome, ThermomutDB, literature; 90% CD-HIT, N=28,463.</li>
+          <li>Performance: test RMSE = 9.37.</li>
         </ul>
-        <details>
-          <summary>Model details</summary>
-          <ul>
-            <li>ESM embeddings reduced for auxiliary classification into low/mid/high stability by a 3-layer head.</li>
-            <li>Final regressor: Linear(d<sub>in</sub>, H) → ReLU → Dropout → Linear(H, H/2) → ReLU → Dropout → Linear(H/2, 1).</li>
-          </ul>
-        </details>
-      </article>
-    </section>
-
-    <section>
-      <h2>Awards and Roles</h2>
-      <ul class="bullets">
-        <li>Provincial Third Prize, Hubei Province Life Science Competition (Team Captain).</li>
-        <li>Second-Class Academic Scholarship; Outstanding Student Award; Academic Excellence Award; Scientific Innovation Award.</li>
-      </ul>
-      <!-- Awards summarized from resume.  [oai_citation:3‡resume_1_0_0__1_.pdf](file-service://file-TyoLnHyHgKSvUT1ZCxvuNm) -->
+        <span class="card__cta">View details →</span>
+      </a>
     </section>
   </main>
 

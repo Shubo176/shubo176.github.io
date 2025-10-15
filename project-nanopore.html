@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>DNA Modification Detection — Shubo Li</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Nanopore-based DNA modification detection with Transformers">
+  <link rel="stylesheet" href="assets/style.css">
+  <script defer src="assets/site.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a class="nav__logo" href="/">SL</a>
+      <button class="nav__toggle" aria-label="Toggle navigation" onclick="toggleNav()">☰</button>
+      <ul id="navmenu" class="nav__menu">
+        <li><a href="/">Home</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="mailto:ethanli041012@gmail.com">Contact</a></li>
+        <li><a href="https://github.com/Shubo176" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    <nav class="breadcrumb"><a href="projects.html">Projects</a> / DNA Modification Detection</nav>
+    <h1>DNA Modification Detection from Nanopore Signals with Transformers</h1>
+    <p class="muted">Genomics · Multimodal · Transformer</p>
+
+    <section class="figure">
+      <h2>Pipeline Diagram</h2>
+      <!-- Inline SVG flowchart: editable, no external images -->
+      <svg viewBox="0 0 1100 360" role="img" aria-label="Nanopore pipeline" class="flow">
+        <defs>
+          <style>
+            .b{fill:#111317;stroke:#374151;stroke-width:1.2}
+            .t{fill:#e5e7eb;font:14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu}
+            .a{marker-end:url(#arrow)}
+          </style>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#9aa3af"/>
+          </marker>
+        </defs>
+
+        <!-- Nodes -->
+        <rect class="b" x="20" y="40" width="180" height="60" rx="10"/>
+        <text class="t" x="110" y="75" text-anchor="middle">Nanopore raw signal</text>
+
+        <rect class="b" x="240" y="40" width="230" height="60" rx="10"/>
+        <text class="t" x="355" y="68" text-anchor="middle">Alignment to reference</text>
+        <text class="t" x="355" y="88" text-anchor="middle">Window: 21bp per site</text>
+
+        <rect class="b" x="510" y="40" width="250" height="60" rx="10"/>
+        <text class="t" x="635" y="68" text-anchor="middle">Preprocess traces</text>
+        <text class="t" x="635" y="88" text-anchor="middle">normalize + pad/truncate to 32</text>
+
+        <rect class="b" x="800" y="40" width="280" height="60" rx="10"/>
+        <text class="t" x="940" y="68" text-anchor="middle">Concatenate</text>
+        <text class="t" x="940" y="88" text-anchor="middle">21×(4 one-hot + 32 signal) = 21×36</text>
+
+        <rect class="b" x="120" y="170" width="300" height="70" rx="10"/>
+        <text class="t" x="270" y="195" text-anchor="middle">Transformer encoder ×6</text>
+        <text class="t" x="270" y="215" text-anchor="middle">8 heads · FFN 512→256→512 · GELU</text>
+
+        <rect class="b" x="470" y="170" width="200" height="70" rx="10"/>
+        <text class="t" x="570" y="205" text-anchor="middle">AvgPool + MLP</text>
+
+        <rect class="b" x="720" y="170" width="180" height="70" rx="10"/>
+        <text class="t" x="810" y="200" text-anchor="middle">Logistic output</text>
+
+        <rect class="b" x="940" y="170" width="140" height="70" rx="10"/>
+        <text class="t" x="1010" y="205" text-anchor="middle">Modified / Unmodified</text>
+
+        <!-- Arrows -->
+        <line x1="200" y1="70" x2="240" y2="70" stroke="#9aa3af" stroke-width="1.5" class="a"/>
+        <line x1="470" y1="70" x2="510" y2="70" stroke="#9aa3af" stroke-width="1.5" class="a"/>
+        <line x1="760" y1="70" x2="800" y2="70" stroke="#9aa3af" stroke-width="1.5" class="a"/>
+        <line x1="420" y1="205" x2="470" y2="205" stroke="#9aa3af" stroke-width="1.5" class="a"/>
+        <line x1="670" y1="205" x2="720" y2="205" stroke="#9aa3af" stroke-width="1.5" class="a"/>
+        <line x1="900" y1="205" x2="940" y2="205" stroke="#9aa3af" stroke-width="1.5" class="a"/>
+      </svg>
+      <figcaption class="muted">End-to-end pipeline from raw current to classification.</figcaption>
+    </section>
+
+    <section>
+      <h2>Summary</h2>
+      <ul class="bullets">
+        <li>Input fusion: 21bp one-hot + normalized current (len=32) → 21×36 features.</li>
+        <li>Backbone: 6-layer Transformer encoder, 8 heads, GELU, residual+LN, dropout.</li>
+        <li>Training: F1-driven LR scheduler, early stopping, best/last checkpoints.</li>
+        <li>Split: xtg103 + fully modified plasmid for train/val; <em>sal87</em> for test.</li>
+        <li>Observation: ~20% modified proportion on <em>sal87</em> under current setup.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Notes and Next</h2>
+      <ul class="bullets">
+        <li>Plan to add OOD evaluation across strains and signal drift conditions.</li>
+        <li>Interpretability via attention and saliency on key bases.</li>
+        <li>Optional graph view of k-mer dependencies for robustness.</li>
+      </ul>
+    </section>
+
+    <p><a class="btn btn--ghost" href="projects.html">← Back to Projects</a></p>
+  </main>
+
+  <footer class="site-footer">
+    <small>© <span id="year"></span> Shubo Li</small>
+  </footer>
+</body>
+</html>

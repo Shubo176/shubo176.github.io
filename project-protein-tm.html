@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Protein Tm Prediction — Shubo Li</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Protein melting temperature prediction via ESM and AlphaFold">
+  <link rel="stylesheet" href="assets/style.css">
+  <script defer src="assets/site.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a class="nav__logo" href="/">SL</a>
+      <button class="nav__toggle" aria-label="Toggle navigation" onclick="toggleNav()">☰</button>
+      <ul id="navmenu" class="nav__menu">
+        <li><a href="/">Home</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="mailto:ethanli041012@gmail.com">Contact</a></li>
+        <li><a href="https://github.com/Shubo176" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    <nav class="breadcrumb"><a href="projects.html">Projects</a> / Protein Tm Prediction</nav>
+    <h1>Protein Melting Temperature Prediction via ESM and AlphaFold</h1>
+    <p class="muted">Proteins · Multimodal · Regression</p>
+
+    <section class="figure">
+      <h2>Model Diagram</h2>
+      <!-- Inline SVG flowchart -->
+      <svg viewBox="0 0 1100 420" role="img" aria-label="Protein Tm model" class="flow">
+        <defs>
+          <style>
+            .b{fill:#111317;stroke:#374151;stroke-width:1.2}
+            .t{fill:#e5e7eb;font:14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu}
+            .a{marker-end:url(#arrow)}
+          </style>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#9aa3af"/>
+          </marker>
+        </defs>
+
+        <!-- Inputs -->
+        <rect class="b" x="20" y="40" width="240" height="70" rx="10"/>
+        <text class="t" x="140" y="70" text-anchor="middle">Sequence</text>
+        <text class="t" x="140" y="90" text-anchor="middle">ESM embeddings (1280-d)</text>
+
+        <rect class="b" x="300" y="40" width="240" height="70" rx="10"/>
+        <text class="t" x="420" y="65" text-anchor="middle">Structure</text>
+        <text class="t" x="420" y="85" text-anchor="middle">AlphaFold features (1280-d)</text>
+
+        <rect class="b" x="580" y="40" width="220" height="70" rx="10"/>
+        <text class="t" x="690" y="65" text-anchor="middle">Biophysics</text>
+        <text class="t" x="690" y="85" text-anchor="middle">Rosetta ΔG, Shannon entropy, OGT</text>
+
+        <rect class="b" x="850" y="40" width="220" height="70" rx="10"/>
+        <text class="t" x="960" y="70" text-anchor="middle">Concatenate</text>
+
+        <!-- Arrows -->
+        <line x1="260" y1="75" x2="300" y2="75" stroke="#9aa3af" stroke-width="1.5" class="a"/>
+        <line x1="540" y1="75" x2="580" y2="75" stroke="#9aa3af" stroke-width="1.5" class="a"/>
+        <line x1="800" y1="75" x2="850" y2="75" stroke="#9aa3af" stroke-width="1.5" class="a"/>
+
+        <!-- Heads -->
+        <rect class="b" x="120" y="160" width="280" height="70" rx="10"/>
+        <text class="t" x="260" y="195" text-anchor="middle">Aux head: stability class</text>
+        <text class="t" x="260" y="215" text-anchor="middle">1280→256→32→Softmax (low/mid/high)</text>
+
+        <rect class="b" x="460" y="160" width="360" height="100" rx="10"/>
+        <text class="t" x="640" y="190" text-anchor="middle">Regressor</text>
+        <text class="t" x="640" y="210" text-anchor="middle">Linear(d<sub>in</sub>, H) → ReLU → Dropout → Linear(H, H/2) → ReLU → Dropout → Linear(H/2, 1)</text>
+
+        <rect class="b" x="870" y="170" width="180" height="80" rx="10"/>
+        <text class="t" x="960" y="205" text-anchor="middle">Predicted Tm</text>
+
+        <!-- Arrows -->
+        <line x1="400" y1="195" x2="460" y2="195" stroke="#9aa3af" stroke-width="1.5" class="a"/>
+        <line x1="820" y1="210" x2="870" y2="210" stroke="#9aa3af" stroke-width="1.5" class="a"/>
+
+        <!-- Data Split -->
+        <rect class="b" x="120" y="300" width="380" height="70" rx="10"/>
+        <text class="t" x="310" y="330" text-anchor="middle">Data: FireProt / ProThermDB / Meltome / ThermomutDB / literature</text>
+        <text class="t" x="310" y="350" text-anchor="middle">CD-HIT 90% de-redundancy, N=28,463; 9:1 train/val; 75 post-2023 test</text>
+
+        <rect class="b" x="540" y="300" width="220" height="70" rx="10"/>
+        <text class="t" x="650" y="330" text-anchor="middle">Optuna HPO</text>
+        <text class="t" x="650" y="350" text-anchor="middle">LR, batch size, H, dropout, weight decay</text>
+
+        <rect class="b" x="800" y="300" width="250" height="70" rx="10"/>
+        <text class="t" x="925" y="330" text-anchor="middle">Evaluation</text>
+        <text class="t" x="925" y="350" text-anchor="middle">Test RMSE = 9.37; 10-fold CV in progress</text>
+
+        <line x1="500" y1="335" x2="540" y2="335" stroke="#9aa3af" stroke-width="1.5" class="a"/>
+        <line x1="760" y1="335" x2="800" y2="335" stroke="#9aa3af" stroke-width="1.5" class="a"/>
+      </svg>
+      <figcaption class="muted">Dual-channel fusion with auxiliary stability classification and Optuna tuning.</figcaption>
+    </section>
+
+    <section>
+      <h2>Summary</h2>
+      <ul class="bullets">
+        <li>Embeddings: ESM (sequence) and AlphaFold (structure), both 1280-d.</li>
+        <li>Fusion with ΔG, entropy, OGT; MLP regressor with dropout.</li>
+        <li>De-redundant dataset of 28,463 proteins; temporal split for generalization.</li>
+        <li>Test RMSE = 9.37; conducting 10-fold cross-validation.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Notes and Next</h2>
+      <ul class="bullets">
+        <li>Domain-aware OOD tests across protein families and temperature ranges.</li>
+        <li>Ablations on feature groups and stability-class auxiliary loss.</li>
+        <li>Interpretable residues via attribution on sequence/structure channels.</li>
+      </ul>
+    </section>
+
+    <p><a class="btn btn--ghost" href="projects.html">← Back to Projects</a></p>
+  </main>
+
+  <footer class="site-footer">
+    <small>© <span id="year"></span> Shubo Li</small>
+  </footer>
+</body>
+</html>
