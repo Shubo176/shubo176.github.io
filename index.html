@@ -1,30 +1,105 @@
----
-layout: default
-title : Homepage
-navbar_title: Home
----
-{% include widgets/profile_card.html %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Shubo Li — AI for Science</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI for Science: biomolecular modeling, multimodal learning, and scientific ML.">
+  <link rel="stylesheet" href="assets/style.css">
+  <script defer src="assets/site.js"></script>
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Person",
+    "name":"Shubo Li",
+    "email":"mailto:ethanli041012@gmail.com",
+    "url":"https://<your-domain-or-github-username>.github.io/",
+    "sameAs":["https://github.com/Shubo176"],
+    "jobTitle":"Undergraduate, Bioinformatics",
+    "affiliation":{"@type":"CollegeOrUniversity","name":"Wuhan Polytechnic University"}
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a class="nav__logo" href="/">SL</a>
+      <button class="nav__toggle" aria-label="Toggle navigation" onclick="toggleNav()">☰</button>
+      <ul id="navmenu" class="nav__menu">
+        <li><a href="/">Home</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="mailto:ethanli041012@gmail.com">Contact</a></li>
+        <li><a href="https://github.com/Shubo176" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+    </nav>
+  </header>
 
-{% include widgets/debug_repo_name.html %}
+  <main class="container">
+    <section class="hero">
+      <h1>Shubo Li</h1>
+      <p class="hero__tagline">
+        AI for Science: biomolecular modeling, multimodal learning, and scientific ML.
+      </p>
+      <p class="hero__cta">
+        <a class="btn" href="projects.html">View Projects</a>
+        <a class="btn btn--ghost" href="mailto:ethanli041012@gmail.com">Email Me</a>
+      </p>
+      <!-- Source of contact and education from resume.  [oai_citation:1‡resume_1_0_0__1_.pdf](file-service://file-TyoLnHyHgKSvUT1ZCxvuNm) -->
+    </section>
 
-{% include widgets/debug_url.html %}
+    <section class="split">
+      <div>
+        <h2>About</h2>
+        <p>
+          Bioinformatics undergraduate focusing on AI for Biology. I build learning systems that integrate sequence, structure,
+          and signal to model biological phenomena and reduce experimental costs. Current interests include multimodal fusion,
+          Transformer-based scientific modeling, OOD generalization, and interpretability.
+        </p>
+      </div>
+      <div>
+        <h2>Focus</h2>
+        <ul class="checklist">
+          <li>Multimodal learning: sequence · structure · signal</li>
+          <li>Protein thermodynamics and stability</li>
+          <li>Epigenetic modification detection from Nanopore signals</li>
+          <li>Robustness, OOD generalization, interpretability</li>
+        </ul>
+      </div>
+    </section>
 
-{% if site.data.display.homepage.show_experience %}
-    {% include widgets/experience_card.html %}
-{% endif %}
+    <section>
+      <h2>Skills</h2>
+      <div class="tags">
+        <span>Python</span><span>PyTorch</span><span>Transformers</span>
+        <span>ESM</span><span>AlphaFold</span><span>Rosetta</span>
+        <span>Scikit-learn</span><span>Pandas</span><span>BLAST</span>
+        <span>Linux</span><span>GitHub</span><span>HuggingFace</span>
+      </div>
+    </section>
 
-{% if site.data.display.homepage.show_news %}
-    {% assign count_news = site.news | size %}
-    {% if count_news > 0 %}
-        {% include widgets/news_card.html limit=site.data.display.homepage.num_news %}
-    {% endif %}
-{% endif %}
+    <section>
+      <h2>Highlights</h2>
+      <ul class="bullets">
+        <li>Protein thermal stability prediction on 28k+ proteins with dual-channel neural networks.</li>
+        <li>Nanopore-based DNA modification detection with Transformer models.</li>
+        <li>Back-end lead for a steroid drug database system with Django and MySQL.</li>
+      </ul>
+      <!-- Highlights derived from resume.  [oai_citation:2‡resume_1_0_0__1_.pdf](file-service://file-TyoLnHyHgKSvUT1ZCxvuNm) -->
+    </section>
 
-{% if site.data.display.homepage.show_selected_publications %}
-    {% assign pubs = site.publications | sort: "date" | reverse | where: "selected", true %}
-    {% 
-        include widgets/publication_card.html 
-        publications=pubs
-        title='<i class="fas fa-star"></i> Selected Publications'
-    %}
-{% endif %}
+    <section>
+      <h2>Quick Links</h2>
+      <p>
+        <a href="projects.html">Projects</a> ·
+        <a href="mailto:ethanli041012@gmail.com">Email</a> ·
+        <a href="https://github.com/Shubo176" target="_blank" rel="noopener">GitHub</a>
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <small>© <span id="year"></span> Shubo Li</small>
+  </footer>
+</body>
+</html>
