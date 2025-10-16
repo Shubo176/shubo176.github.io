@@ -1,7 +1,45 @@
----
-layout: prompt
-title: 404 - Page Not Found
----
-<h1 class="mt-5">404</h1>
-<p class="lead">The requested page could not be found.</p>
-<p><a href="{{ '/' | relative_url }}">Go home</a></p>
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <title>Page Not Found — Li Shubo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The page you're looking for could not be found.">
+  <link rel="stylesheet" href="assets/style.css">
+  <script defer src="assets/site.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a class="nav__logo" href="/">SL</a>
+      <button class="nav__toggle" aria-label="Toggle navigation" onclick="toggleNav()">☰</button>
+      <ul id="navmenu" class="nav__menu">
+        <li><a href="/">Home</a></li>
+        <li><a href="index.html#projects">Projects</a></li>
+        <li><a href="mailto:ethanli041012@gmail.com">Contact</a></li>
+        <li><a href="https://github.com/Shubo176" target="_blank" rel="noopener">GitHub</a></li>
+        <li>
+          <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" onclick="toggleTheme()">
+            <span aria-hidden="true">🌙</span>
+            <span class="theme-toggle__label">Dark</span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container not-found">
+    <section class="section--center">
+      <h1>404 — Page Not Found</h1>
+      <p class="muted">Oops! The page you were trying to reach does not exist or has been moved.</p>
+      <p>
+        <a class="btn" href="/">← Back to Home</a>
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <small>© <span id="year"></span> Shubo Li</small>
+  </footer>
+</body>
+</html>

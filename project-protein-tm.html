@@ -55,6 +55,103 @@
       We also explored a classification variant that bins Tm into low/medium/high stability. I authored the dimensionality reduction stack that maps the ESM embedding from 1280→256→32 before a softmax head; this lightweight branch allows the model to serve both regression and coarse categorization depending on downstream needs.</p>
   </section>
 
+  <section id="results" class="results">
+    <h2>Results</h2>
+    <p class="muted">Click headers to sort</p>
+    <div class="table-wrap" style="overflow-x:auto">
+      <table id="tm-table" style="width:100%; border-collapse: collapse">
+        <thead>
+          <tr>
+            <th data-sort-type="string" style="text-align:left; border-bottom:1px solid var(--border, #ddd); padding:8px; cursor:pointer">Model</th>
+            <th data-sort-type="percent" style="text-align:left; border-bottom:1px solid var(--border, #ddd); padding:8px; cursor:pointer">Proteome Coverage</th>
+            <th data-sort-type="number" style="text-align:left; border-bottom:1px solid var(--border, #ddd); padding:8px; cursor:pointer">Test RMSE</th>
+            <th data-sort-type="number" style="text-align:left; border-bottom:1px solid var(--border, #ddd); padding:8px; cursor:pointer">Validation RMSE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">model</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">34.18% (893/2613)</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">9.5745</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">5.8378</td>
+          </tr>
+          <tr>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">esmtemp</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">24.25% (634/2614)</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">15.0774</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">5.9494</td>
+          </tr>
+          <tr>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">prostabp2</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">22.38% (585/2614)</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">17.2452</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">8.8761</td>
+          </tr>
+          <tr>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">seq2Topt</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">32.75% (856/2614)</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">12.8500</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">9.6034</td>
+          </tr>
+          <tr>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">DeepStabP</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">19.28% (504/2614)</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">15.6519</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">6.4214</td>
+          </tr>
+          <tr>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">temBERTure</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">20.31% (531/2614)</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">14.6336</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">6.2694</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      (function(){
+        const table = document.getElementById('tm-table');
+        const filter = document.getElementById('tm-filter');
+        const getNumber = (text, type) => {
+          if (type === 'percent') {
+            const m = String(text).match(/([\d.]+)%/);
+            return m ? parseFloat(m[1]) : Number.NaN;
+          }
+          return parseFloat(text);
+        };
+        // Sorting
+        table.querySelectorAll('th').forEach((th, idx) => {
+          let asc = true;
+          th.addEventListener('click', () => {
+            const type = th.getAttribute('data-sort-type') || 'string';
+            const rows = Array.from(table.tBodies[0].rows);
+            rows.sort((a, b) => {
+              let av = a.cells[idx].innerText.trim();
+              let bv = b.cells[idx].innerText.trim();
+              if (type === 'number' || type === 'percent') {
+                av = getNumber(av, type);
+                bv = getNumber(bv, type);
+                return asc ? av - bv : bv - av;
+              }
+              return asc ? av.localeCompare(bv) : bv.localeCompare(av);
+            });
+            rows.forEach(r => table.tBodies[0].appendChild(r));
+            asc = !asc;
+          });
+        });
+        // Filtering
+        filter.addEventListener('input', () => {
+          const q = filter.value.toLowerCase();
+          Array.from(table.tBodies[0].rows).forEach(row => {
+            const show = row.innerText.toLowerCase().includes(q);
+            row.style.display = show ? '' : 'none';
+          });
+        });
+      })();
+    </script>
+  </section>
+
   <p><a class="btn btn--ghost" href="index.html#projects">← Back to Projects</a></p>
 </main>
 
