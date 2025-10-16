@@ -37,19 +37,20 @@
     <h2>Workflow</h2>
     <img src="assets/img/image2.png" alt="Protein Tm project workflow">
     <figcaption>Dataset construction, embedding fusion, auxiliary head, and evaluation.</figcaption>
+    <img src="assets/img/image4.png" alt="Protein Tm project workflow">
+    <figcaption>OGTclassify Model Structure.</figcaption>
   </section>
 
   <section>
     <h2>Model Summary</h2>
-    <dl class="kv">
-      <dt>Embeddings</dt><dd>ESM sequence and AlphaFold structure, 1280-d each.</dd>
-      <dt>Descriptors</dt><dd>Rosetta ΔG, Shannon entropy, OGT classification.</dd>
-      <dt>Fusion</dt><dd>Concatenation into a unified vector for the heads.</dd>
-      <dt>Heads</dt><dd>Auxiliary stability classifier (1280→256→32→Softmax) and an MLP regressor for Tm.</dd>
-      <dt>Data</dt><dd>28,463 proteins after CD-HIT 90%; 9:1 train/val; 75 post-2023 as test.</dd>
-      <dt>HPO</dt><dd>Optuna over LR, batch size, hidden size H, dropout, weight decay.</dd>
-      <dt>Results</dt><dd>Test RMSE = 9.37; 10-fold cross-validation ongoing.</dd>
-    </dl>
+    <p>This project establishes a complete workflow covering data collection, feature extraction, and deep learning model training for predicting protein melting temperature (Tm) from sequence and structural information. The overall process consists of two main stages.</p>
+<p>During the <strong>data collection phase</strong>, researchers integrated data from multiple sources, including manually curated databases such as <strong>FireProt</strong>, <strong>ProThermDB</strong>, <strong>Meltome</strong>, and <strong>ThermomutDB</strong>. Protein sequences were retrieved via the <strong>UniProt API</strong> to ensure high-quality, reliable entries. Additionally, datasets from existing models such as <strong>DeepStabp</strong>, <strong>DeepTm</strong>, and <strong>TemBERTure</strong> were incorporated to increase sample size and diversity. Further, literature mining was performed on <strong>PubMed</strong> and <strong>BRENDA</strong> databases to extract additional protein sequences and experimentally measured stability data, including manually curated results from <strong>Elsevier journals</strong> and <strong>BRENDA-linked references</strong>. Most of these data were merged into the training set, while data collected after 2023 were used as the test set.</p>
+<p>Before entering the training stage, the merged dataset underwent strict redundancy removal and quality control. Using the <strong>CD-HIT clustering algorithm</strong>, sequences with greater than 90% similarity were removed to ensure representativeness and independence among samples. After deduplication, <strong>28,463 samples</strong> remained, including corresponding 3D structural information obtained from the <strong>AlphaFold database</strong>. The dataset was then split in a 9:1 ratio into a training set (25,617 samples) and a validation set (2,846 samples). Additionally, <strong>75 new samples collected after 2023</strong> were reserved as an independent test set for generalization evaluation, forming a high-quality, time-stratified, nonredundant benchmark dataset.</p>
+<p>In the <strong>model design and training phase</strong>, both protein sequence and structure information were used as inputs. Structural representations were derived from <strong>AlphaFold-generated 3D models</strong> and encoded as 1280-dimensional feature vectors, while sequence information was transformed into the same dimension using a <strong>pretrained protein language model</strong> such as <strong>ESM</strong>. In the <strong>feature fusion stage</strong>, the structural representation, sequence representation, and additional features including <strong>energy change (ΔG)</strong> computed from Rosetta, <strong>Shannon entropy</strong>, and the predicted results of a pretrained <strong>OGT model</strong> were combined into a single input vector. The model used a fully connected network with nonlinear mapping through <strong>ReLU</strong> activation and <strong>Dropout</strong> layers to prevent overfitting, following the structure: <strong>Linear(d_in, H) → ReLU → Dropout → Linear(H, H/2) → ReLU → Dropout → Linear(H/2, 1)</strong>, which outputs the predicted Tm value.</p>
+<p>The study also adopted the <strong>Optuna framework</strong> for hyperparameter optimization. In implementation, Optuna defined an objective function encapsulating the entire training and validation loop. In each trial, Optuna dynamically adjusted search directions based on prior results, generating new parameter combinations for key variables including <strong>learning rate</strong>, <strong>batch size</strong>, <strong>hidden layer dimension (H)</strong>, <strong>Dropout probability (p)</strong>, and <strong>weight decay</strong>. The model was trained on the training set and evaluated on the validation set accordingly.</p>
+<p>In the <strong>classification task</strong> using the pretrained model, ESM-derived embeddings passed through a three-layer dimensionality reduction network, mapping from 1280 dimensions to 256 and then 32, before outputting three categories through a <strong>Softmax layer</strong> corresponding to low-, medium-, and high-temperature stability levels.</p>
+<p>On the test set, after hyperparameter optimization, the model achieved an <strong>RMSE of 9.37</strong>. This RMSE was lower than those reported by previously published models on the same dataset, demonstrating the improved accuracy of this project’s Tm prediction framework. The project is now conducting <strong>10-fold cross-validation across 100 different train-test combinations</strong> to further evaluate the model’s robustness and stability across varied dataset partitions.</p>
+
   </section>
 
   <p><a class="btn btn--ghost" href="projects.html">← Back to Projects</a></p>
