@@ -69,10 +69,30 @@ a:hover{text-decoration:underline}
 .nav__menu button:hover{filter:brightness(0.98)}
 .nav__toggle{display:none;background:transparent;border:0;color:var(--fg);font-size:20px}
 
-.hero{padding:48px 0 12px}
+.hero{
+  display:flex;
+  align-items:center;
+  gap:32px;
+  padding:48px 0 12px;
+}
 .hero h1{font-size:40px;margin:0 0 8px}
 .hero__tagline{color:var(--muted);margin:0 0 16px}
-.hero__cta .btn{margin-right:8px}
+.hero__cta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin:0 0 24px;
+}
+.hero__cta .btn{margin-right:0}
+.hero__content{flex:1}
+.hero__avatar{margin:0;flex-shrink:0}
+.hero__avatar img{
+  width:200px;
+  max-width:40vw;
+  border-radius:16px;
+  border:1px solid var(--ring);
+  box-shadow:0 12px 24px rgba(15,23,42,0.18);
+}
 
 .section--center{
   max-width:720px;
@@ -119,6 +139,11 @@ h2{margin-top:24px}
   .nav__toggle{display:block}
   .nav__menu{display:none;flex-direction:column;background:var(--bg);position:absolute;top:56px;right:16px;border:1px solid var(--ring);padding:12px;border-radius:12px}
   .nav__menu.show{display:flex}
+}
+@media (max-width:700px){
+  .hero{flex-direction:column-reverse;text-align:center}
+  .hero__content{text-align:center}
+  .hero__cta{justify-content:center}
 }
 
 /* Vertical list for projects */
