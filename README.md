@@ -11,6 +11,5 @@ Open `index.html` in a browser.
 3. Save. Your site will be published at `https://<username>.github.io/`.
 
 ## Edit points
-- `index.html`: name, tagline, About, Skills, Highlights.
-- `projects.html`: two AI4S project cards. Add code links when repos are ready.
+- `index.html`: name, tagline, About, Skills, Highlights, Projects section.
 - `assets/style.css`: colors and layout.
