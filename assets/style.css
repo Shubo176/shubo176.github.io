@@ -70,6 +70,14 @@ a:hover{text-decoration:underline}
 .hero__tagline{color:var(--muted);margin:0 0 16px}
 .hero__cta .btn{margin-right:8px}
 
+.section--center{
+  max-width:720px;
+  margin:0 auto 32px;
+  text-align:center;
+}
+.section--center h2{margin-bottom:16px}
+.section--center p{margin:0}
+
 .split{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:24px 0}
 @media (max-width:800px){.split{grid-template-columns:1fr}}
 h1,h2,h3{line-height:1.25}
