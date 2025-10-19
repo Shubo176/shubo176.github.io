@@ -7,6 +7,7 @@
   <meta name="description" content="AI for Science: biomolecular modeling, multimodal learning, and scientific ML.">
   <link rel="stylesheet" href="assets/style.css">
   <script defer src="assets/site.js"></script>
+
   <!-- Schema.org -->
   <script type="application/ld+json">
   {
@@ -46,17 +47,12 @@
     <section class="hero">
       <div class="hero__content">
         <h1>Li Shubo</h1>
-        <p class="hero__tagline">
-          Wuhan Polytechnic University (Undergraduate)
-        </p>
-        <p class="hero__tagline">
-          Majoring in Bioinformatics
-        </p>
+        <p class="hero__tagline">Wuhan Polytechnic University (Undergraduate)</p>
+        <p class="hero__tagline">Majoring in Bioinformatics</p>
         <p class="hero__cta">
           <a class="btn" href="#projects">View Projects</a>
           <a class="btn btn--ghost" href="mailto:ethanli041012@gmail.com">Email Me</a>
         </p>
-        <!-- Source of contact and education from resume.  [oai_citation:1‡resume_1_0_0__1_.pdf](file-service://file-TyoLnHyHgKSvUT1ZCxvuNm) -->
       </div>
       <figure class="hero__avatar">
         <img src="assets/img/image5.png" alt="Li Shubo" loading="lazy">
@@ -67,12 +63,11 @@
       <div>
         <h2>About</h2>
         <p>
-            I am an undergraduate focused on AI for Science. I build learning systems that integrate sequence, structure, and signal to model biological phenomena and reduce experimental cost. My current work includes (1) detecting DNA modifications from Nanopore current traces with Transformer encoders, and (2) predicting protein melting temperature by fusing ESM sequence embeddings, AlphaFold structural features, and biophysical descriptors with an MLP regressor.
-            I care about rigorous evaluation, hyper-parameter search, and out-of-distribution generalization. Technically I use Python and PyTorch with Transformers, ESM, AlphaFold, Rosetta, Optuna, and common scientific ML tooling.
-            In the future, I plan to continue pursuing research in AI for Science, exploring more scalable and interpretable models that bridge machine learning and molecular biology.
+          I am an undergraduate focused on AI for Science. I build learning systems that integrate sequence, structure, and signal to model biological phenomena and reduce experimental cost. My current work includes (1) detecting DNA modifications from Nanopore current traces with Transformer encoders, and (2) predicting protein melting temperature by fusing ESM sequence embeddings, AlphaFold structural features, and biophysical descriptors with an MLP regressor.
+          I care about rigorous evaluation, hyper-parameter search, and out-of-distribution generalization. Technically I use Python and PyTorch with Transformers, ESM, AlphaFold, Rosetta, Optuna, and common scientific ML tooling.
+          In the future, I plan to continue pursuing research in AI for Science, exploring more scalable and interpretable models that bridge machine learning and molecular biology.
         </p>
       </div>
-
     </section>
 
     <section>
@@ -91,7 +86,6 @@
         <li>Protein thermal stability prediction on 28k+ proteins with dual-channel neural networks.</li>
         <li>Nanopore-based DNA modification detection with Transformer models.</li>
       </ul>
-      <!-- Highlights derived from resume.  [oai_citation:2‡resume_1_0_0__1_.pdf](file-service://file-TyoLnHyHgKSvUT1ZCxvuNm) -->
     </section>
 
     <section id="projects" class="page-title section--center">
@@ -128,15 +122,13 @@
   <footer class="site-footer">
     <small>
       © <span id="year"></span> Shubo Li ·
-      Page Views <span id="view-count">…</span>
+      Page Views
+      <!-- 内置组件会在此处渲染数字；设置最小宽度避免跳动 -->
+      <span class="counterapi" style="display:inline-block;min-width:3ch">…</span>
     </small>
   </footer>
-  <script type="module">
-    import { Counter } from 'https://cdn.jsdelivr.net/npm/counterapi/dist/counter.esm.min.js';
-    const c = new Counter({ workspace: 'shubo176-github-io' }); // 可自定义
-    c.up('site-pv')
-    .then(r => { document.getElementById('view-count').textContent = r.value; })
-    .catch(() => { document.getElementById('view-count').textContent = 'N/A'; });
-  </script>
+
+  <!-- CounterAPI 一行脚本：ns 用你的域名区分环境 -->
+  <script src="https://counterapi.com/c.js?ns=shubo176.github.io" async></script>
 </body>
 </html>
