@@ -41,16 +41,17 @@
   </section>
 
   <section>
-    <h2>Model Summary</h2>
+  <h2>Model Summary</h2>
     <p>
       I led the full ML portion of this project, designing both the data extraction workflow and the neural network that performs modification detection on nanopore signals. The wet-lab team sequenced three <em>Salmonella</em> cohorts (xtg103 unmodified, engineered plasmid fully modified, sal87 partially modified). From the raw fast5 outputs, I aligned reads to the reference genome, carved 21 bp windows centered on candidate sites, and synchronized the ionic current traces so each event aligned with its nucleotide window. Outlier bursts were clipped, sequences were normalized per-read, and missing stretches were imputed before packaging everything into training-ready tensors.</p>
     <p>
-      The resulting feature for each locus combined one-hot DNA bases with 32-point current segments, producing a 21×36 matrix. I implemented a lightweight feature builder that batches and caches these matrices, which shortened epoch time by ~30% relative to the initial Python prototype. XtG103 and the plasmid runs served as clean supervision signals, while sal87 was held out for evaluation.</p>
+      The resulting feature for each locus combined one-hot DNA bases with 32-point current segments, producing a 21×36 matrix. XtG103 and the plasmid runs served as clean supervision signals, while sal87 was held out for evaluation.</p>
     <p>
-      For the classifier, I authored a Transformer encoder tailored for short genomic contexts: a linear projection with positional encodings, six attention blocks (8 heads, 64-d each) and feed-forward widths of 512→256→512 activated with GELU. Residual connections, dropout, and LayerNorm were tuned via ablation; the final configuration balanced under/over-fitting across the clean vs. noisy cohorts. Mean pooling and a two-layer MLP emit the binary modification score, with a sigmoid head to preserve probabilistic calibration.</p>
+      The classifier is a Transformer encoder tailored for short genomic contexts: a linear projection with sinusoidal positional encodings, six encoder blocks (8 heads, d<sub>model</sub>=512, FFN=256, GELU), residual connections and LayerNorm as in the standard encoder stack, and dropout=0.2. Mean pooling feeds a two-layer MLP that outputs <b>two-class logits</b>; probabilities are obtained via <b>softmax</b> and trained with <b>CrossEntropyLoss</b>. Optimization uses <b>AdamW</b> (lr=1e-4, weight decay=1e-4) with <b>ReduceLROnPlateau</b> on validation F1 and early stopping (patience=8). We track loss, accuracy, precision, recall, F1, and AUC per epoch.</p>
     <p>
-      I also built the training harness—Optuna-based hyperparameter search, cosine learning-rate scheduling, early-stopping checkpoints, and class-balanced focal loss to stabilize gradients on rare positives. On the held-out sal87 set the model recovered a 20% modification rate, matching external assays. These choices formed a deployable pipeline that turns nanopore currents into reliable modification calls.</p>
+      On the held-out sal87 set the model recovered a 20% modification rate, matching external assays. These choices formed a deployable pipeline that turns nanopore currents into reliable modification calls.</p>
   </section>
+
 
   <p><a class="btn btn--ghost" href="index.html#projects">← Back to Projects</a></p>
 </main>
