@@ -128,10 +128,15 @@
   <footer class="site-footer">
     <small>
       © <span id="year"></span> Shubo Li ·
-      <span id="busuanzi_container_site_pv">总访问量 <span id="busuanzi_value_site_pv"></span></span> ·
-      <span id="busuanzi_container_site_uv">访客数 <span id="busuanzi_value_site_uv"></span></span>
+      Page Views <span id="view-count">…</span>
     </small>
   </footer>
-  <script src="https://api.busuanzi.cc/static/3.6.9/busuanzi.min.js" defer></script>
+  <script type="module">
+    import { Counter } from 'https://cdn.jsdelivr.net/npm/counterapi/dist/counter.esm.min.js';
+    const c = new Counter({ workspace: 'shubo176-github-io' }); // 可自定义
+    c.up('site-pv')
+    .then(r => { document.getElementById('view-count').textContent = r.value; })
+    .catch(() => { document.getElementById('view-count').textContent = 'N/A'; });
+  </script>
 </body>
 </html>
