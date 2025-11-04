@@ -41,21 +41,21 @@
     <figcaption>OGTclassify Model Structure.</figcaption>
   </section>
 
-<section>
-  <h2>Model Summary</h2>
-  <p>
-    Under the supervision of <strong>Professor Huifeng Jiang</strong> at the <strong>Tianjin Institute of Industrial Biotechnology, Chinese Academy of Sciences</strong>, I built a Tm prediction model that integrates sequence, structure, and a small set of well-motivated handcrafted features.
-  </p>
-  <p>
-    I curated Tm records primarily from the <strong>Meltome Atlas</strong>, incorporated entries used by prior models such as <strong>DeepStabp</strong> for training, and mined additional records from recent literature. To assess true generalization, entries <strong>published after 2023</strong> formed an <strong>external test set of 74 proteins</strong>, deduplicated against development data by sequence identity and metadata. After <strong>CD-HIT at 90%</strong> identity, I obtained <strong>28,463</strong> pre-2023 entries: <strong>25,617</strong> for training and <strong>2,846</strong> for validation.
-  </p>
-  <p>
-    For representations, I fused <strong>SaProt (650M)</strong> structure embeddings with sequence embeddings from <strong>ESM-2 (650M)</strong>. I standardized handcrafted inputs (<strong>Rosetta ΔG</strong>, <strong>Shannon entropy</strong>, and an <strong>OGT prior</strong>) and concatenated them before a regression head. Most structures were downloaded from the <strong>AlphaFold Database</strong>; a small portion missing in the database was predicted locally.
-  </p>
-  <p>
-    The regression head is a three-layer MLP with dropout. <strong>Hyperparameters were tuned with Optuna</strong> to balance bias and variance and avoid overfitting to any single subset. For stability estimation, I ran <strong>10-fold cross-validation on the development data with 10 repeats</strong> (100 runs). Across these runs, the mean training RMSE was <strong>5.54</strong> and the validation RMSE was <strong>5.82</strong>.
-  </p>
-</section>
+  <section>
+    <h2>Model Summary</h2>
+    <p>
+      Under the supervision of <strong>Professor Huifeng Jiang</strong> at the <strong>Tianjin Institute of Industrial Biotechnology, Chinese Academy of Sciences</strong>, I built a Tm prediction model that integrates sequence, structure, and a small set of well-motivated handcrafted features.
+    </p>
+    <p>
+      I curated Tm records primarily from the <strong>Meltome Atlas</strong>, incorporated entries used by prior models such as <strong>DeepStabp</strong> for training, and mined additional records from recent literature. To assess true generalization, entries <strong>published after 2023</strong> formed an <strong>external test set of 74 proteins</strong>, deduplicated against development data by sequence identity and metadata. After <strong>CD-HIT at 90%</strong> identity, I obtained <strong>28,463</strong> pre-2023 entries: <strong>25,617</strong> for training and <strong>2,846</strong> for validation.
+    </p>
+    <p>
+      For representations, I fused <strong>SaProt (650M)</strong> structure embeddings with sequence embeddings from <strong>ESM-2 (650M)</strong>. I standardized handcrafted inputs (<strong>Rosetta ΔG</strong>, <strong>Shannon entropy</strong>, and an <strong>OGT prior</strong>) and concatenated them before a regression head. Most structures were downloaded from the <strong>AlphaFold Database</strong>; a small portion missing in the database was predicted locally.
+    </p>
+    <p>
+      The regression head is a three-layer MLP with dropout. <strong>Hyperparameters were tuned with Optuna</strong> to balance bias and variance and avoid overfitting to any single subset. For stability estimation, I ran <strong>10-fold cross-validation on the development data with 10 repeats</strong> (100 runs). Across these runs, the mean training RMSE was <strong>5.54</strong> and the validation RMSE was <strong>5.82</strong>.
+    </p>
+  </section>
 
   <section id="results" class="results">
     <h2>Results</h2>
@@ -64,52 +64,54 @@
       <table id="tm-table" style="width:100%; border-collapse: collapse">
         <thead>
           <tr>
-            <th data-sort-type="string" style="text-align:left; border-bottom:1px solid var(--border, #ddd); padding:8px; cursor:pointer">Model</th>
-            <th data-sort-type="percent" style="text-align:left; border-bottom:1px solid var(--border, #ddd); padding:8px; cursor:pointer">Proteome Coverage</th>
-            <th data-sort-type="number" style="text-align:left; border-bottom:1px solid var(--border, #ddd); padding:8px; cursor:pointer">Test RMSE</th>
-            <th data-sort-type="number" style="text-align:left; border-bottom:1px solid var(--border, #ddd); padding:8px; cursor:pointer">Validation RMSE</th>
+            <th data-sort-type="string" style="text-align:left; border-bottom:1px solid var(--border, #ddd); padding:8px; cursor:pointer">模型</th>
+            <th data-sort-type="number" style="text-align:left; border-bottom:1px solid var(--border, #ddd); padding:8px; cursor:pointer">RMSE</th>
+            <th data-sort-type="number" style="text-align:left; border-bottom:1px solid var(--border, #ddd); padding:8px; cursor:pointer">PCC</th>
+            <th data-sort-type="number" style="text-align:left; border-bottom:1px solid var(--border, #ddd); padding:8px; cursor:pointer">SCC</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">model</td>
-            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">34.18% (893/2613)</td>
-            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">9.3745</td>
-            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">5.8378</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">DeepPreTm</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">9.2088</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">0.6526</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">0.4888</td>
           </tr>
           <tr>
             <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">esmtemp</td>
-            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">24.25% (634/2614)</td>
-            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">15.0774</td>
-            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">5.9494</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">12.3967</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">0.5335</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">0.3698</td>
           </tr>
           <tr>
-            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">prostabp2</td>
-            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">22.38% (585/2614)</td>
-            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">17.2452</td>
-            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">8.8761</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">ProTstab2</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">15.0497</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">0.0729</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">0.1269</td>
           </tr>
           <tr>
             <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">seq2Topt</td>
-            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">32.75% (856/2614)</td>
-            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">12.8500</td>
-            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">9.6034</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">10.8453</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">0.4383</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">0.2732</td>
           </tr>
           <tr>
             <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">DeepStabP</td>
-            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">19.28% (504/2614)</td>
-            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">15.6519</td>
-            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">6.4214</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">13.6252</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">0.5023</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">0.2440</td>
           </tr>
           <tr>
             <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">temBERTure</td>
-            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">20.31% (531/2614)</td>
-            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">14.6336</td>
-            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">6.2694</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">12.4772</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">0.4428</td>
+            <td style="padding:8px; border-bottom:1px solid var(--border, #eee)">0.3415</td>
           </tr>
         </tbody>
       </table>
     </div>
+
+
 
     <script>
       (function(){
